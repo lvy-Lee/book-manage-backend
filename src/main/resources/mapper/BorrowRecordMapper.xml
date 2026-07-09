@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bookmanage.mapper.BorrowRecordMapper">
+
+    <resultMap id="BaseResultMap" type="BorrowRecord">
+        <id column="id" property="id"/>
+        <result column="user_id" property="userId"/>
+        <result column="book_id" property="bookId"/>
+        <result column="borrow_time" property="borrowTime"/>
+        <result column="return_time" property="returnTime"/>
+        <result column="status" property="status"/>
+    </resultMap>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO borrow_record (user_id, book_id, borrow_time, `status`)
+        VALUES (#{userId}, #{bookId}, #{borrowTime}, #{status})
+    </insert>
+
+    <select id="selectById" resultMap="BaseResultMap">
+        SELECT * FROM borrow_record WHERE id = #{id}
+    </select>
+
+    <!-- 查询当前用户的借阅记录，关联图书名称 -->
+    <select id="selectByUserId" resultType="com.bookmanage.dto.BorrowRecordResponse">
+        SELECT
+            r.id,
+            r.user_id AS userId,
+            NULL AS username,
+            r.book_id AS bookId,
+            b.title AS bookTitle,
+            r.borrow_time AS borrowTime,
+            r.return_time AS returnTime,
+            r.`status` AS status
+        FROM borrow_record r
+        LEFT JOIN book b ON r.book_id = b.id
+        WHERE r.user_id = #{userId}
+        ORDER BY r.borrow_time DESC
+    </select>
+
+    <!-- 管理员查询全部借阅记录，关联图书名称和用户名 -->
+    <select id="selectAllWithUser" resultType="com.bookmanage.dto.BorrowRecordResponse">
+        SELECT
+            r.id,
+            r.user_id AS userId,
+            u.username,
+            r.book_id AS bookId,
+            b.title AS bookTitle,
+            r.borrow_time AS borrowTime,
+            r.return_time AS returnTime,
+            r.`status` AS status
+        FROM borrow_record r
+        LEFT JOIN book b ON r.book_id = b.id
+        LEFT JOIN `user` u ON r.user_id = u.id
+        ORDER BY r.borrow_time DESC
+    </select>
+
+    <update id="updateById">
+        UPDATE borrow_record
+        SET return_time = #{returnTime}, `status` = #{status}
+        WHERE id = #{id}
+    </update>
+
+</mapper>

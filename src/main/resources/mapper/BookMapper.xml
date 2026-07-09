@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bookmanage.mapper.BookMapper">
+
+    <resultMap id="BaseResultMap" type="Book">
+        <id column="id" property="id"/>
+        <result column="title" property="title"/>
+        <result column="author" property="author"/>
+        <result column="publisher" property="publisher"/>
+        <result column="isbn" property="isbn"/>
+        <result column="category" property="category"/>
+        <result column="description" property="description"/>
+        <result column="status" property="status"/>
+        <result column="create_time" property="createTime"/>
+    </resultMap>
+
+    <select id="selectAll" resultMap="BaseResultMap">
+        SELECT * FROM book ORDER BY create_time DESC
+    </select>
+
+    <select id="selectByKeyword" resultMap="BaseResultMap">
+        SELECT * FROM book
+        WHERE title LIKE CONCAT('%', #{keyword}, '%')
+           OR author LIKE CONCAT('%', #{keyword}, '%')
+        ORDER BY create_time DESC
+    </select>
+
+    <select id="selectById" resultMap="BaseResultMap">
+        SELECT * FROM book WHERE id = #{id}
+    </select>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO book (title, author, publisher, isbn, category, description, `status`, create_time)
+        VALUES (#{title}, #{author}, #{publisher}, #{isbn}, #{category}, #{description}, #{status}, #{createTime})
+    </insert>
+
+    <update id="updateById">
+        UPDATE book
+        SET title = #{title}, author = #{author}, publisher = #{publisher},
+            isbn = #{isbn}, category = #{category}, description = #{description}
+        WHERE id = #{id}
+    </update>
+
+    <update id="updateStatus">
+        UPDATE book SET `status` = #{status} WHERE id = #{id}
+    </update>
+
+    <delete id="deleteById">
+        DELETE FROM book WHERE id = #{id}
+    </delete>
+
+</mapper>
