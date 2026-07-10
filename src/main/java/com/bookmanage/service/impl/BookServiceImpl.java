@@ -1,5 +1,6 @@
 package com.bookmanage.service.impl;
 
+import com.bookmanage.common.PageData;
 import com.bookmanage.dto.BookRequest;
 import com.bookmanage.dto.BookResponse;
 import com.bookmanage.entity.Book;
@@ -22,14 +23,13 @@ public class BookServiceImpl implements BookService {
     private final BookMapper bookMapper;
 
     @Override
-    public List<BookResponse> list(String keyword) {
-        List<Book> books;
-        if (keyword != null && !keyword.trim().isEmpty()) {
-            books = bookMapper.selectByKeyword(keyword.trim());
-        } else {
-            books = bookMapper.selectAll();
-        }
-        return books.stream().map(this::toResponse).collect(Collectors.toList());
+    public PageData<BookResponse> list(String keyword, int page, int size) {
+        String kw = (keyword != null) ? keyword.trim() : "";
+        int offset = (page - 1) * size;
+        long total = bookMapper.countByKeyword(kw);
+        List<Book> books = bookMapper.selectByKeywordWithPage(kw, offset, size);
+        List<BookResponse> list = books.stream().map(this::toResponse).collect(Collectors.toList());
+        return new PageData<>(total, page, size, list);
     }
 
     @Override

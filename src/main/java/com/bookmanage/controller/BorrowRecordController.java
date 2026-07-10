@@ -41,10 +41,11 @@ public class BorrowRecordController {
      */
     @PutMapping("/{id}/return")
     public Result<BorrowRecordResponse> returnBook(@PathVariable Long id,
-                                                    HttpServletRequest httpRequest) {
+                                                     HttpServletRequest httpRequest) {
         Long userId = (Long) httpRequest.getAttribute("currentUserId");
+        String role = (String) httpRequest.getAttribute("currentUserRole");
         try {
-            BorrowRecordResponse r = borrowRecordService.returnBook(id, userId);
+            BorrowRecordResponse r = borrowRecordService.returnBook(id, userId, "admin".equals(role));
             return Result.success(r);
         } catch (IllegalArgumentException e) {
             return Result.error(400, e.getMessage());

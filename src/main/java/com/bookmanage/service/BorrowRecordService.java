@@ -21,10 +21,11 @@ public interface BorrowRecordService {
      * 还书
      * @param recordId 借阅记录 ID
      * @param userId 当前用户 ID
+     * @param isAdmin 是否为管理员（管理员可代还）
      * @return 借阅记录
      * @throws IllegalArgumentException 记录不存在、不属于当前用户、或已归还
      */
-    BorrowRecordResponse returnBook(Long recordId, Long userId);
+    BorrowRecordResponse returnBook(Long recordId, Long userId, boolean isAdmin);
 
     /**
      * 查询当前用户的借阅记录

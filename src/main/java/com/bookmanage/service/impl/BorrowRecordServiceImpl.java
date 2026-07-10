@@ -53,12 +53,12 @@ public class BorrowRecordServiceImpl implements BorrowRecordService {
 
     @Override
     @Transactional
-    public BorrowRecordResponse returnBook(Long recordId, Long userId) {
+    public BorrowRecordResponse returnBook(Long recordId, Long userId, boolean isAdmin) {
         BorrowRecord record = borrowRecordMapper.selectById(recordId);
         if (record == null) {
             throw new IllegalArgumentException("借阅记录不存在");
         }
-        if (!record.getUserId().equals(userId)) {
+        if (!record.getUserId().equals(userId) && !isAdmin) {
             throw new IllegalArgumentException("无权操作该记录");
         }
         if (!"borrowed".equals(record.getStatus())) {

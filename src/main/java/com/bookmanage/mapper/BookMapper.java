@@ -27,4 +27,8 @@ public interface BookMapper {
      * 更新图书状态（available / borrowed）
      */
     int updateStatus(@Param("id") Long id, @Param("status") String status);
+
+    List<Book> selectByKeywordWithPage(@Param("keyword") String keyword, @Param("offset") int offset, @Param("limit") int limit);
+
+    long countByKeyword(@Param("keyword") String keyword);
 }

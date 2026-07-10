@@ -1,5 +1,6 @@
 package com.bookmanage.controller;
 
+import com.bookmanage.common.PageData;
 import com.bookmanage.common.Result;
 import com.bookmanage.dto.BookRequest;
 import com.bookmanage.dto.BookResponse;
@@ -9,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.util.List;
 
 /**
  * 图书管理接口，基础路径 /api/books
@@ -22,11 +22,14 @@ public class BookController {
     private final BookService bookService;
 
     /**
-     * 查询图书列表，支持按标题/作者模糊搜索
+     * 查询图书列表，支持按标题/作者模糊搜索，支持分页
      */
     @GetMapping
-    public Result<List<BookResponse>> list(@RequestParam(required = false) String keyword) {
-        return Result.success(bookService.list(keyword));
+    public Result<PageData<BookResponse>> list(
+            @RequestParam(required = false) String keyword,
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        return Result.success(bookService.list(keyword, page, size));
     }
 
     /**

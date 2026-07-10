@@ -49,4 +49,26 @@
         DELETE FROM book WHERE id = #{id}
     </delete>
 
+    <select id="selectByKeywordWithPage" resultMap="BaseResultMap">
+        SELECT * FROM book
+        <where>
+            <if test="keyword != null and keyword != ''">
+                title LIKE CONCAT('%', #{keyword}, '%')
+                OR author LIKE CONCAT('%', #{keyword}, '%')
+            </if>
+        </where>
+        ORDER BY create_time DESC
+        LIMIT #{limit} OFFSET #{offset}
+    </select>
+
+    <select id="countByKeyword" resultType="long">
+        SELECT COUNT(*) FROM book
+        <where>
+            <if test="keyword != null and keyword != ''">
+                title LIKE CONCAT('%', #{keyword}, '%')
+                OR author LIKE CONCAT('%', #{keyword}, '%')
+            </if>
+        </where>
+    </select>
+
 </mapper>

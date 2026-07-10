@@ -1,15 +1,14 @@
 package com.bookmanage.service;
 
+import com.bookmanage.common.PageData;
 import com.bookmanage.dto.BookRequest;
 import com.bookmanage.dto.BookResponse;
-
-import java.util.List;
 
 /**
  * 图书业务接口
  */
 public interface BookService {
-    List<BookResponse> list(String keyword);
+    PageData<BookResponse> list(String keyword, int page, int size);
 
     BookResponse getById(Long id);
 
