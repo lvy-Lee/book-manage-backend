@@ -14,11 +14,11 @@
 
 1. 创建 MySQL 数据库 `bookmanage`
 2. 修改 `application.properties` 中的数据库密码
-3. 运行 `mvnw spring-boot:run`
-4. 访问 `http://localhost:8080`
+3. 运行 `mvnw.cmd spring-boot:run`（Windows）或 `mvnw spring-boot:run`（Mac/Linux）
+4. 后端 API 运行在 `http://localhost:8080`
 
 ## 默认账号
-
+/
 | 用户名 | 密码 | 角色 |
 |--------|------|------|
 | admin | admin123 | 管理员 |
